@@ -7,7 +7,7 @@ from llama_index.llms.bedrock import Bedrock
 from llama_index.embeddings.bedrock import BedrockEmbedding
 from llama_index.graph_stores.neptune import (
     NeptuneAnalyticsPropertyGraphStore,
-    NeptuneAnalyticsGraphStore,
+    NeptuneDatabasePropertyGraphStore,
 )
 from llama_index.core import PropertyGraphIndex, Settings
 import logging
@@ -34,9 +34,6 @@ kg_host: str = os.getenv("GRAPH_ENDPOINT")
 port: int = int(os.getenv("PORT", 8182))
 # The Cluster transport protocol for these clusters
 use_https = os.getenv("USE_HTTPS", "true").lower() in ("true", "1")
-# The Cluster Endpoint for the GraphRAG clust
-#
-kgrag_host: str = os.getenv("KGRAG_ENDPOINT")
 graphrag_host: str = os.getenv("GRAPHRAG_HOST")
 # The max number of triples extracted per chunk for the GraphRAG KG Index
 max_triplets_per_chunk = os.getenv("MAX_TRIPLETS_PER_CHUNK", 5)
@@ -51,8 +48,7 @@ embed_model = BedrockEmbedding(
 Settings.embed_model = embed_model
 
 # Create the the PropertyGraphStore and KG Graph Store to use the provided Neptune Database
-graph_store = NeptuneAnalyticsPropertyGraphStore(graph_identifier=graphrag_host)
-kg_graph_store = NeptuneAnalyticsGraphStore(graph_identifier=graphrag_host)
+graph_store = NeptuneDatabasePropertyGraphStore(host=kg_host)
 graphrag_store = NeptuneAnalyticsPropertyGraphStore(graph_identifier=graphrag_host)
 
 
@@ -79,7 +75,6 @@ def get_knowledge_graph_retriever():
 def get_knowledge_graph_rag():
     return KnowledgeGraphEnhancedRAG(
         graphrag_store,
-        kg_graph_store,
         llm,
         embed_model,
         max_triplets_per_chunk=max_triplets_per_chunk,
