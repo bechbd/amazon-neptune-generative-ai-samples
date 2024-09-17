@@ -40,8 +40,10 @@ def run_query(prompt, index):
                         prompt
                     )
                 else:
-                    response = knowledge_graph_enhanced_rag.run_kgrag_answer_question(
-                        prompt
+                    response = (
+                        knowledge_graph_enhanced_rag.run_graphrag_answer_question(
+                            prompt
+                        )
                     )
                 if response.results:
                     response.results += f"\n\n {index}"
