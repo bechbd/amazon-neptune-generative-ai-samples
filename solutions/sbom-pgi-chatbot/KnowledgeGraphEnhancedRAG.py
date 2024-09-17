@@ -75,7 +75,7 @@ class KnowledgeGraphEnhancedRAG:
             parser = PDFReader()
             file_extractor = {".pdf": parser}
             reader = SimpleDirectoryReader(
-                input_dir="data/sec", file_extractor=file_extractor
+                input_dir="data/kg_enhanced_rag", file_extractor=file_extractor
             )
             documents = reader.load_data()
 
@@ -144,7 +144,7 @@ class KnowledgeGraphEnhancedRAG:
             parser = PDFReader()
             file_extractor = {".pdf": parser}
             reader = SimpleDirectoryReader(
-                input_dir="data/sec", file_extractor=file_extractor
+                input_dir="data/kg_enhanced_rag", file_extractor=file_extractor
             )
             documents = reader.load_data()
 
